@@ -1,7 +1,8 @@
-import DobotDllType as dType
+import serial
 import time
-import keyboard
-# ser = serial.Serial('COM3',115200)
+import threading
+import DobotDllType as dType
+ser = serial.Serial('COM1',115200)
 
 CON_STR = {
     dType.DobotConnect.DobotConnect_NoError:  "DobotConnect_NoError",
@@ -18,36 +19,29 @@ c=0
 d=0
 e=0
 
-# note : set home 200,0,30
 def screensaver():
     #screen saver
-    while (True):
-        dType.SetPTPCmdEx(api, 0, 235, 185, 29, 0, 1)
-        dType.SetPTPCmdEx(api, 0, 230, -185, 29, 0, 1)
-        dType.SetPTPCmdEx(api, 0, 185, -155, 35, 0, 1)
-        dType.SetPTPCmdEx(api, 0, 225, 105, 35, 0, 1)
-        dType.dSleep(1000)
-        
-        if keyboard.read_key() == "a" :
-            b = 1
-            break
-        
-       
-       
+    #dType.SetPTPCmdEx(api, 0, 235, 185, 29, 0, 1)
+    #dType.SetPTPCmdEx(api, 0, 230, -185, 29, 0, 1)
+    #dType.SetPTPCmdEx(api, 0, 185, -155, 35, 0, 1)
+    #dType.SetPTPCmdEx(api, 0, 225, 105, 35, 0, 1)
+    #dType.dSleep(1000)
+    dType.SetPTPCmdEx(api, 0, 68, -292, 0, 0, 1)
+    dType.SetPTPCmdEx(api, 0, 68, -292, 50, 0, 1)
+    dType.SetPTPCmdEx(api, 0, 100, 282, 0, 0, 1)
+    dType.SetPTPCmdEx(api, 0, 100, 282, 50, 0, 1)
 
     #cone
-    #dType.SetPTPCmdEx(api, 1,-10, -260, 60, 0, 1)
-
+    #dType.SetPTPCmdEx(api, 1,-10, -260, 60, 0, 1)  
 def motion1():
     dType.SetPTPCmd(api, 1, 10, 280, 95, 0, 1)
     dType.SetPTPJointParams(api, 55, 55, 55, 55, 55, 55, 55, 55, 1)
     dType.SetPTPCoordinateParams(api, 55, 55, 55, 55,  1)
 
 def circle():
-    
     #motion circle
     dType.SetCircleCmd(api, (56,273,135,0),(46, 265, 135, 0), 3, 1)
-    
+
 def lambat2():
     dType.SetPTPJointParams(api, 70, 70, 70, 70, 70, 70, 70, 70, 1)
     dType.SetPTPCoordinateParams(api, 70, 70, 70, 70,  1)
@@ -80,7 +74,7 @@ def after_cone():
     dType.SetPTPCmd(api, 1, 55.9347, 273.4606, 145, 78.4399, 1)
 
 def home():
-    dType.SetPTPCmd(api, 1, 195.6 , -41.5 , 30, 0, 1)
+   dType.SetPTPCmd(api, 1, 195.6 , -41.5 , 30, 0, 1)
 
 def cost():
     # dType.SetPTPCmd(api, 1, 131, -243, 5.9, 0, 1)
@@ -95,12 +89,12 @@ def customer():
     dType.SetPTPCmdEx(api, 2, 300, -41.5, 0, 0, 1)
     dType.SetWAITCmdEx(api, 0.1, 1)
 
-if (state == dType.DobotConnect.DobotConnect_NoError):
+if (state == dType.DobotConnect.DobotConnect_NoError): 
     #Clean Command Queued
     # dType.SetQueuedCmdClear(api)
+  
     #Stop to Execute Command Queued
     dType.SetQueuedCmdStopExec(api)
-
     #Start to Execute Command Queued
     dType.SetQueuedCmdStartExec(api)
 
@@ -108,11 +102,15 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
     dType.SetPTPJointParams(api, 150, 150, 150, 150, 150, 150, 150, 150, 1)
     dType.SetPTPCoordinateParams(api, 100, 100, 100, 100,1)
 
-    while(True) : 
-            # print(dType.GetIODI(api, 15))
-            #print(dType.GetIOADC(api, 15))
-            #print(dType.GetIODI(api, 12))
-
+    while True:   
+        x = ser.read() 
+        #Cone detection
+        # if a==0:
+        #     screensaver()
+        #     a=1
+        #Gerakan Utama
+        if x == ('1'.encode('utf-8')):
+            print("Gerakan Utama")
             lambat2()
             customer()
             dType.dSleep(2000)
@@ -131,16 +129,36 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             customer()
             dType.dSleep(3500)
             home()
-            break
-    
+            ser.write(b'1')
+            x
+       # elif x == ('0'.encode('utf-8')) :
+         #   print("Gerakan Utama")
+          #  lambat2()
+           # customer()
+            #dType.dSleep(2000)
+            #home()
+            #cepat()
+            #pre_cone()
+            #dType.dSleep(5000)
+            #lambat1()
+            #circle()
+            #after_cone()
+            #dType.dSleep(1000)
+            #pre_cone()
+            #cepat()
+            #home()
+            #lambat2()
+            #customer()
+            #dType.dSleep(3500)
+            #home()
+            #ser.write(b'1')
+            #x
+        elif x == ('2'.encode('utf-8')):
+            print("Homing")
+            screensaver()
+            home()
+            x
 
+ 
 
-    #screensaver()  
-    #customer()
-    #pre_cone()
-    #circle()
-    #home()
-    #customer()
-
-
-
+       
