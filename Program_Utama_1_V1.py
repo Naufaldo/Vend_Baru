@@ -112,10 +112,14 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
     dType.SetPTPCoordinateParams(api, 100, 100, 100, 100,1)
     cepat()
 
-    
-    screensaver()
+    #Homing For Start
+    dType.GetHOMEParams(api)
+    dType.SetHOMEParams(api,  200,  0,  30,  0,  1)
+    dType.GetHOMEParams(api)
+    dType.SetHOMECmd(api, 1, 1)
     home()
     playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Robot Ready.mp3')
+    print("Ready")
 
 
     while True: 
@@ -132,6 +136,7 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
         #     a=1
         #Gerakan Utama
         if x == ('1'.encode('utf-8')):
+            ser.write(b'3')
             print("Gerakan Utama")
             playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Process.mp3')
             lambat2()
@@ -150,10 +155,12 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             lambat2()
             dType.SetEndEffectorSuctionCup(api, 1,  0, 1)
             customer()
+            ser.write(b'1')
             playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ice Cream to Customer.mp3')
             dType.dSleep(2500)
+            ser.write(b'5')
             home()
-            ser.write(b'1')
+            print("Gerakan Utama Selesai")
             x
     
         elif x == ('2'.encode('utf-8')):
