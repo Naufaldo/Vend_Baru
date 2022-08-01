@@ -118,16 +118,16 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
     dType.GetHOMEParams(api)
     dType.SetHOMECmd(api, 1, 1)
     home()
-    playsound('..\VoiceMaker\Robot Ready.mp3')
+    playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Robot Ready.mp3')
     print("Ready")
 
 
     while True: 
         cepat()
         bow()
-        playsound('..\VoiceMaker\Introduce 2.mp3')
+        playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Introduce 2.mp3')
         home()
-        playsound('..\VoiceMaker\Press Start.mp3')
+        playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Press Start.mp3')
         x = ser.read() 
         
         #Cone detection
@@ -138,7 +138,7 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
         if x == ('1'.encode('utf-8')):
             ser.write(b'3')
             print("Gerakan Utama")
-            playsound('..\VoiceMaker\Process.mp3')
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Process.mp3')
             lambat2()
             cone_loader()
             dType.dSleep(2000)
@@ -156,7 +156,7 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             dType.SetEndEffectorSuctionCup(api, 1,  0, 1)
             customer()
             ser.write(b'1')
-            playsound('..\VoiceMaker\Ice Cream to Customer.mp3')
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ice Cream to Customer.mp3')
             dType.dSleep(2500)
             ser.write(b'5')
             home()
@@ -167,11 +167,11 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             print("Homing")
             screensaver()
             home()
-            playsound('..\VoiceMaker\Robot Ready.mp3')
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Robot Ready.mp3')
             x
 
         elif x == ('3'.encode('utf-8')):
-            playsound('..\VoiceMaker\Shut Down.mp3')
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Shut Down.mp3')
             break
 
  
