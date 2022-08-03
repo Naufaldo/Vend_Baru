@@ -108,10 +108,16 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
     dType.SetPTPJointParams(api, 150, 150, 150, 150, 150, 150, 150, 150, 1)
     dType.SetPTPCoordinateParams(api, 100, 100, 100, 100,1)
 
+    dType.SetIOMultiplexing(api, 15, 1, 1)
+    dType.SetIOMultiplexing(api, 14, 1, 1)
+
+
     while(True) : 
             # print(dType.GetIODI(api, 15))
             #print(dType.GetIOADC(api, 15))
             #print(dType.GetIODI(api, 12))
+            dType.SetIODO(api, 15, 1, 1)
+            dType.SetIODO(api, 14, 1, 1)
 
             lambat2()
             customer()
@@ -119,14 +125,20 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             home()
             cepat()
             pre_cone()
+            dType.SetIODO(api, 14, 1, 1)
+            dType.SetIODO(api, 15, 0, 1)
             dType.dSleep(5000)
             lambat1()
             circle()
             after_cone()
             dType.dSleep(1000)
             pre_cone()
+            dType.SetIODO(api, 14, 0, 1)
+            dType.SetIODO(api, 15, 1, 1)
             cepat()
             home()
+            dType.SetIODO(api, 15, 1, 1)
+            dType.SetIODO(api, 14, 1, 1)
             lambat2()
             customer()
             dType.dSleep(3500)

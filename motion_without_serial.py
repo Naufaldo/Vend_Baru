@@ -99,9 +99,12 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             # print(dType.GetIODI(api, 15))
             #print(dType.GetIOADC(api, 15))
             #print(dType.GetIODI(api, 12))
+            dType.SetIODO(api, 14, 0, 1)
             pre_cone()
             circle()
+            dType.SetIODO(api, 14, 1, 1)
             home()
+            break
     
 
 

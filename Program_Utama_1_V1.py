@@ -98,6 +98,25 @@ def bow():
     dType.SetPTPCmdEx(api, 2, 195.6, -41.5, 0, 0, 1)
     dType.SetWAITCmdEx(api, 1, 1)
     dType.SetPTPCmdEx(api, 2, 195.6, -41.5, (-10), 0, 1)
+
+def Homing():
+    dType.GetHOMEParams(api)
+    dType.SetHOMEParams(api,  200,  0,  30,  0,  1)
+    dType.GetHOMEParams(api)
+    dType.SetHOMECmd(api, 1, 1)
+
+def motor_mati():
+    dType.SetIODO(api, 15, 1, 1)
+    dType.SetIODO(api, 14, 1, 1)
+
+def motor_Maju():
+    dType.SetIODO(api, 15, 0, 1)
+    dType.SetIODO(api, 14, 1, 1)
+
+def motor_Mundur():
+    dType.SetIODO(api, 15, 1, 1)
+    dType.SetIODO(api, 14, 0, 1)
+
 if (state == dType.DobotConnect.DobotConnect_NoError): 
     #Clean Command Queued
     # dType.SetQueuedCmdClear(api)
@@ -112,11 +131,12 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
     dType.SetPTPCoordinateParams(api, 100, 100, 100, 100,1)
     cepat()
 
+    #Setting Parameter Input Output
+    dType.SetIOMultiplexing(api, 15, 1, 1)
+    dType.SetIOMultiplexing(api, 14, 1, 1)
+
     #Homing For Start
-    dType.GetHOMEParams(api)
-    dType.SetHOMEParams(api,  200,  0,  30,  0,  1)
-    dType.GetHOMEParams(api)
-    dType.SetHOMECmd(api, 1, 1)
+    Homing()
     home()
     playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Robot Ready.mp3')
     print("Ready")
@@ -137,6 +157,7 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
         #Gerakan Utama
         if x == ('1'.encode('utf-8')):
             ser.write(b'3')
+            motor_mati()
             print("Gerakan Utama")
             playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Process.mp3')
             lambat2()
@@ -144,14 +165,17 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             dType.dSleep(2000)
             cepat()
             pre_cone()
+            motor_Maju()
             dType.dSleep(5000)
             lambat1()
             circle()
             after_cone()
             dType.dSleep(1000)
+            motor_Mundur()
             pre_cone()
             cepat()
             home()
+            motor_mati()
             lambat2()
             dType.SetEndEffectorSuctionCup(api, 1,  0, 1)
             customer()
@@ -163,7 +187,8 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
             print("Gerakan Utama Selesai")
             x
     
-        elif x == ('2'.encode('utf-8')):
+        elif x == ('5'.encode('utf-8')):
+            Homing()
             print("Homing")
             screensaver()
             home()
