@@ -1,3 +1,4 @@
+from pytest import Item
 import DobotDllType as dType
 import time
 import keyboard
@@ -42,19 +43,21 @@ def motion1():
     dType.SetPTPCmd(api, 1, 10, 280, 95, 0, 1)
     dType.SetPTPJointParams(api, 55, 55, 55, 55, 55, 55, 55, 55, 1)
     dType.SetPTPCoordinateParams(api, 55, 55, 55, 55,  1)
+    dType.GetPose(api)
 
 def circle():
     
     #motion circle
     dType.SetCircleCmd(api, (56,273,135,0),(46, 265, 135, 0), 3, 1)
+    dType.GetPose(api)
     
 def lambat2():
-    dType.SetPTPJointParams(api, 70, 70, 70, 70, 70, 70, 70, 70, 1)
-    dType.SetPTPCoordinateParams(api, 70, 70, 70, 70,  1)
-
-def lambat1():
     dType.SetPTPJointParams(api, 80, 80, 80, 80, 80, 80, 80, 80, 1)
     dType.SetPTPCoordinateParams(api, 80, 80, 80, 80,  1)
+
+def lambat1():
+    dType.SetPTPJointParams(api, 85, 85, 85, 85, 85, 85, 85, 85, 1)
+    dType.SetPTPCoordinateParams(api, 85, 85, 85, 85,  1)
 
 def cepat():
     dType.SetPTPJointParams(api, 90, 90, 90, 90, 90, 90, 90, 90, 1)
@@ -72,15 +75,19 @@ def cone_loader():
     dType.SetPTPCmd(api, 1, 26.8, -248.6, 60, 0, 1)
     dType.SetPTPCmd(api, 1, 26.8, -248.6, 30, 0, 1)
     dType.SetPTPCmd(api, 1, 200, 0, 30, 0, 1)
+    dType.GetPose(api)
 
 def pre_cone():
     dType.SetPTPCmd(api, 1, 55.9347, 273.4606, 135, 78.4399, 1)
+    dType.GetPose(api)
 
 def after_cone():
     dType.SetPTPCmd(api, 1, 55.9347, 273.4606, 145, 78.4399, 1)
+    dType.GetPose(api)
 
 def home():
     dType.SetPTPCmd(api, 1, 195.6 , -41.5 , 30, 0, 1)
+    dType.GetPose(api)
 
 def cost():
     # dType.SetPTPCmd(api, 1, 131, -243, 5.9, 0, 1)
@@ -94,7 +101,11 @@ def customer():
     dType.SetWAITCmdEx(api, 1, 1)
     dType.SetPTPCmdEx(api, 2, 300, -41.5, 0, 0, 1)
     dType.SetWAITCmdEx(api, 0.1, 1)
+    dType.GetPose(api)
 
+def sensor(res):
+    res = dType.GetIODI(api, 9)
+    
 if (state == dType.DobotConnect.DobotConnect_NoError):
     #Clean Command Queued
     # dType.SetQueuedCmdClear(api)
@@ -110,40 +121,49 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
 
     dType.SetIOMultiplexing(api, 15, 1, 1)
     dType.SetIOMultiplexing(api, 14, 1, 1)
+    dType.SetIOMultiplexing(api, 9, 3, 1)
 
 
     while(True) : 
             # print(dType.GetIODI(api, 15))
             #print(dType.GetIOADC(api, 15))
-            #print(dType.GetIODI(api, 12))
-            dType.SetIODO(api, 15, 1, 1)
-            dType.SetIODO(api, 14, 1, 1)
-
-            lambat2()
+            cone_loader()
+            home()
+            dType.dSleep(6000)
+            hsen=dType.GetIODI(api, 9)
+            if hsen == [1] :
+                print("cone")
+                continue
+            print("Terdeteksi")
+            lambat1()
+            pre_cone()
+            circle()
+            home()
             customer()
             dType.dSleep(2000)
             home()
-            cepat()
-            pre_cone()
-            dType.SetIODO(api, 14, 1, 1)
-            dType.SetIODO(api, 15, 0, 1)
-            dType.dSleep(5000)
-            lambat1()
-            circle()
-            after_cone()
-            dType.dSleep(1000)
-            pre_cone()
-            dType.SetIODO(api, 14, 0, 1)
-            dType.SetIODO(api, 15, 1, 1)
-            cepat()
-            home()
-            dType.SetIODO(api, 15, 1, 1)
-            dType.SetIODO(api, 14, 1, 1)
-            lambat2()
-            customer()
-            dType.dSleep(3500)
-            home()
-            break
+            
+            #cepat()
+            #pre_cone()
+           # dType.SetIODO(api, 14, 1, 1)
+            #dType.SetIODO(api, 15, 0, 1)
+            #dType.dSleep(5000)
+            #lambat1()
+            #circle()
+            #after_cone()
+            #dType.dSleep(1000)
+            #pre_cone()
+            #dType.SetIODO(api, 14, 0, 1)
+            #dType.SetIODO(api, 15, 1, 1)
+            #cepat()
+            #home()
+            #dType.SetIODO(api, 15, 1, 1)
+            #dType.SetIODO(api, 14, 1, 1)
+            #lambat2()
+            #customer()
+            #dType.dSleep(3500)
+            #home()qq
+            #break
     
 
 

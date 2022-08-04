@@ -51,11 +51,11 @@ def lambat2():
     dType.SetPTPCoordinateParams(api, 70, 70, 70, 70,  1)
 
 def lambat1():
-    dType.SetPTPJointParams(api, 80, 80, 80, 80, 80, 80, 80, 80, 1)
-    dType.SetPTPCoordinateParams(api, 80, 80, 80, 80,  1)
+    dType.SetPTPJointParams(api, 85, 85, 85, 85, 85, 85, 85, 85, 1)
+    dType.SetPTPCoordinateParams(api, 85, 85, 85, 85,  1)
 
 def cepat():
-    dType.SetPTPJointParams(api, 90, 90, 90, 90, 90, 90, 90, 90, 1)
+    dType.SetPTPJointParams(api, 100, 100, 100, 100, 100, 100, 100, 100, 1)
     dType.SetPTPCoordinateParams(api, 100, 100, 100, 100,  1)
 
 def motion3():
@@ -110,12 +110,12 @@ def motor_mati():
     dType.SetIODO(api, 14, 1, 1)
 
 def motor_Maju():
-    dType.SetIODO(api, 15, 0, 1)
-    dType.SetIODO(api, 14, 1, 1)
-
-def motor_Mundur():
     dType.SetIODO(api, 15, 1, 1)
     dType.SetIODO(api, 14, 0, 1)
+
+def motor_Mundur():
+    dType.SetIODO(api, 15, 0, 1)
+    dType.SetIODO(api, 14, 1, 1)
 
 if (state == dType.DobotConnect.DobotConnect_NoError): 
     #Clean Command Queued
@@ -134,70 +134,98 @@ if (state == dType.DobotConnect.DobotConnect_NoError):
     #Setting Parameter Input Output
     dType.SetIOMultiplexing(api, 15, 1, 1)
     dType.SetIOMultiplexing(api, 14, 1, 1)
+    dType.SetIOMultiplexing(api, 9, 3, 1)
 
     #Homing For Start
     Homing()
     home()
-    playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Robot Ready.mp3')
+    dType.dSleep(15000)
+    playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Siap.mp3')
     print("Ready")
 
+    h=1
 
     while True: 
-        cepat()
-        bow()
-        playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Introduce 2.mp3')
-        home()
-        playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Press Start.mp3')
+        if h == 1:
+            cepat()
+            bow()
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Pengenalan.mp3')
+            home()
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Registrasi.mp3')
+            h = 2
+            continue
         x = ser.read() 
-        
         #Cone detection
         # if a==0:
         #     screensaver()
         #     a=1
         #Gerakan Utama
-        if x == ('1'.encode('utf-8')):
-            ser.write(b'3')
-            motor_mati()
-            print("Gerakan Utama")
-            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Process.mp3')
-            lambat2()
-            cone_loader()
-            dType.dSleep(2000)
-            cepat()
-            pre_cone()
-            motor_Maju()
-            dType.dSleep(5000)
-            lambat1()
-            circle()
-            after_cone()
-            dType.dSleep(1000)
-            motor_Mundur()
-            pre_cone()
-            cepat()
-            home()
-            motor_mati()
-            lambat2()
-            dType.SetEndEffectorSuctionCup(api, 1,  0, 1)
-            customer()
-            ser.write(b'1')
-            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ice Cream to Customer.mp3')
-            dType.dSleep(2500)
-            ser.write(b'5')
-            home()
-            print("Gerakan Utama Selesai")
+        z =1
+        if x == ('7'.encode('utf-8')):
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Start.mp3')
+            h = 2
             x
+        if x == ('1'.encode('utf-8')):
+            C = 1
+            while C == 1 :
+                if z  == 1 :
+                    ser.write(b'3')
+                    motor_mati()
+                    print("Gerakan Utama")
+                    playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Proses.mp3')
+                    z = 2
+                    continue 
+                cepat()
+                cone_loader()
+                home()
+                dType.dSleep(6000)
+                hsen=dType.GetIODI(api, 9)
+                if hsen == [1] :
+                    print("cone")
+                    dType.SetEndEffectorSuctionCup(api, 1,  0, 1)
+                    continue
+                print("Cone Dapat")
+                motor_Maju()
+                cepat()
+                pre_cone()
+                dType.dSleep(8000)
+                lambat1()
+                circle()
+                motor_Mundur()
+                after_cone()
+                dType.dSleep(1000) 
+                pre_cone()
+                cepat()
+                home()
+                motor_mati()
+                cepat()
+                dType.SetEndEffectorSuctionCup(api, 1,  0, 1)
+                customer()
+                ser.write(b'1')
+                playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Kustomer.mp3')
+                dType.dSleep(2500)
+                ser.write(b'5')
+                home()
+                print("Gerakan Utama Selesai")
+                h = 1
+                z = 1
+                C = 2
+            
+            x
+            
     
         elif x == ('5'.encode('utf-8')):
             Homing()
             print("Homing")
             screensaver()
             home()
-            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Robot Ready.mp3')
+            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Ver 2\Siap.mp3')
+            h = 1
             x
 
-        elif x == ('3'.encode('utf-8')):
-            playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Shut Down.mp3')
-            break
+       # elif x == ('3'.encode('utf-8')):
+           # playsound('D:\Kuliah Online\Magang\Asperio\GESS\Dobot Vending Machine\Program VB\VoiceMaker\Shut Down.mp3')
+           # break
 
  
 
